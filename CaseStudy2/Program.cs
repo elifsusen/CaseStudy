@@ -53,15 +53,18 @@ namespace CaseStudy2
 
             foreach (var item in textBoxes)
             {
+                //en yakın y koordinatlı öğeyi bul.
+                var closest = texts.Any() ? texts.Aggregate((x, y) => Math.Abs(x.First_y - item.Min_y) < Math.Abs(y.First_y - item.Min_y) ? x : y)
+                                              : new TextLine();
+                var currentText = texts.FirstOrDefault(x => x.Line == closest.Line);
+
                 if (prevItem.Max_y <= item.Min_y || prevItem.X > item.X)
                 {
-                    var closest = texts.Any() ? texts.Aggregate((x, y) => Math.Abs(x.First_y - item.Min_y) < Math.Abs(y.First_y - item.Min_y) ? x : y)
-                                              : new TextLine();
-
+                    
                     if (closest.Last_x != 0 && closest.Last_x < item.X)
                     {
-                        texts.FirstOrDefault(x => x.Line == closest.Line).Text = $"{texts[closest.Line - 1].Text} {item.Description}";
-                        texts.FirstOrDefault(x => x.Line == closest.Line).Last_x = item.X;
+                        currentText.Text = $"{texts[closest.Line - 1].Text} {item.Description}";
+                        currentText.Last_x = item.X;
 
                     }
                     else
@@ -73,11 +76,8 @@ namespace CaseStudy2
                 }
                 else
                 {
-                    //en yakın y koordinatını bul. textin sonuna ekle.
-                    var closest = texts.Aggregate((x, y) => Math.Abs(x.First_y - item.Min_y) < Math.Abs(y.First_y - item.Min_y) ? x : y);
-                    texts.FirstOrDefault(x => x.Line == closest.Line).Text = $"{texts[closest.Line - 1].Text} {item.Description}";
-                    texts.FirstOrDefault(x => x.Line == closest.Line).Last_x = item.X;
-
+                    currentText.Text = $"{texts[closest.Line - 1].Text} {item.Description}";
+                    currentText.Last_x = item.X;
                 }
 
                 prevItem = item;
