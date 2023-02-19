@@ -22,7 +22,7 @@ namespace CaseStudy1
 
             using (var generator = new RNGCryptoServiceProvider())
             {
-                var bytes = new byte[5];
+                var bytes = new byte[4];
                 generator.GetBytes(bytes); // fills an array of bytes with a cryptographically  strong random sequence of values. 
                 return BitConverter.ToString(bytes).Replace("-", string.Empty); // convert to hex values.
             }
